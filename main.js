@@ -5,23 +5,28 @@ const heartBtns = document.querySelectorAll('.like-glyph')
 const errorModal = document.getElementById('modal')
 // Your JavaScript code goes here!
 
-heartBtns.forEach(btn => btn.addEventListener('click',()=>{
-  mimicServerCall().then(data => {
-    let serverMsg = data
-    if (serverMsg === "Pretend remote server notified of action!"){
-      if (btn.innerText === EMPTY_HEART){
-        btn.innerText = FULL_HEART;
-        btn.setAttribute("class","activated-heart");
-      } else if (btn.innerText === FULL_HEART){
-      btn.innerText = EMPTY_HEART;
-      btn.setAttribute("class","like-glyph");
-    }}
-  } 
-  ).catch((error)=>{
-    errorModal.setAttribute('class','');
-    errorModal.innerText = error;
+heartBtns.forEach(btn => handleEvent(btn))
+
+function handleEvent(btn){
+  btn.addEventListener('click',()=>{
+    mimicServerCall().then(data => {
+      if (data === "Pretend remote server notified of action!"){
+        if (btn.innerText === EMPTY_HEART){
+          btn.innerText = FULL_HEART;
+          btn.setAttribute("class","activated-heart");
+        } else {
+          btn.innerText = EMPTY_HEART;
+          btn.setAttribute("class","like-glyph");
+        };
+      };
+    }
+    ).catch((error)=>{
+      errorModal.setAttribute('class','');
+      errorModal.innerText = error;
+      setTimeout(()=>{errorModal.setAttribute('class','hidden')},3000)
+    })
   })
-}))
+}
 
 
 
